@@ -41,3 +41,31 @@ for name, df in datasets.items():
 
     print(f"\n{name}")
     print(df.dtypes)
+
+#Merge datasets using their observation dates
+merged = delinquency.merge(
+    fed_funds,
+    on="observation_date",
+    how="inner"
+)
+
+merged = merged.merge(
+    unemployment,
+    on="observation_date",
+    how="inner"
+)
+
+merged = merged.merge(
+    cpi,
+    on="observation_date",
+    how="inner"
+)
+
+#Inspect the combined dataset
+print("\n--- Combined Economic Dataset ---")
+print("Dimensions:", merged.shape)
+print("\nFirst Five Observations:")
+print(merged.head())
+
+print("\nMissing Values:")
+print(merged.isnull().sum())
