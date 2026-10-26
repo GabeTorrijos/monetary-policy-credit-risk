@@ -87,3 +87,35 @@ print(
 
 print("\nMissing Inflation Values:")
 print(merged["inflation_yoy"].isnull().sum())
+
+#Remove observations with missing inflation data
+cleaned = merged.dropna(subset=["inflation_yoy"]).copy()
+
+#Select and rename variables for research dataset
+cleaned = cleaned[
+    [
+        "observation_date",
+        "DRALACBS",
+        "FEDFUNDS",
+        "UNRATE",
+        "inflation_yoy"
+    ]
+].rename(
+    columns={
+        "DRALACBS": "delinquency_rate",
+        "FEDFUNDS": "fed_funds_rate",
+        "UNRATE": "unemployment_rate"
+    }
+)
+
+#Save the cleaned dataset
+cleaned.to_csv("data/processed/monetary_credit_risk.csv", index=False)
+
+#Verify the final dataset
+print("\n--- Clean Research Dataset ---")
+print("Dimensions:", cleaned.shape)
+print("\nFirst Five Observations:")
+print(cleaned.head())
+
+print("\nMissing Values:")
+print(cleaned.isnull().sum())
