@@ -69,3 +69,21 @@ print(merged.head())
 
 print("\nMissing Values:")
 print(merged.isnull().sum())
+
+#Calculate year-over-year inflation from quarterly CPI
+merged = merged.sort_values("observation_date").reset_index(drop=True)
+
+merged["inflation_yoy"] = (
+    merged["CPIAUCSL"].pct_change(periods=4) * 100
+)
+
+#Inspect the inflation calculation
+print("\n--- Inflation Calculation ---")
+print(
+    merged[
+        ["observation_date", "CPIAUCSL", "inflation_yoy"]
+    ].head(8)
+)
+
+print("\nMissing Inflation Values:")
+print(merged["inflation_yoy"].isnull().sum())
