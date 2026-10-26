@@ -33,3 +33,11 @@ for name, df in datasets.items():
 
     print("\nMissing Values:")
     print(df.isnull().sum())
+
+ 
+ # Convert observation dates to datetime objects
+for name, df in datasets.items():
+    df["observation_date"] = pd.to_datetime(df["observation_date"])
+
+    print(f"\n{name}")
+    print(df.dtypes)
