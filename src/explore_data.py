@@ -13,3 +13,23 @@ print("Commercial Bank Delinquency:", delinquency.shape)
 print("Federal Funds Rate:", fed_funds.shape)
 print("Unemployment Rate:", unemployment.shape)
 print("Consumer Price Index", cpi.shape)
+
+#Inspect the structure of each dataset
+datasets = { 
+    "Commercial Bank Delinquency": delinquency,
+    "Federal Funds Rate": fed_funds,
+    "Unemployment Rate": unemployment,
+    "Consumer Price Index": cpi
+}
+
+for name, df in datasets.items():
+    print(f"\n--- {name} ---")
+
+    print("\nColumn Names:")
+    print(df.columns.tolist())
+
+    print("\nData Types:")
+    print(df.dtypes)
+
+    print("\nMissing Values:")
+    print(df.isnull().sum())
