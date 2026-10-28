@@ -56,3 +56,42 @@ plt.savefig(
 )
 
 plt.show()
+
+#Compare delinquency rates and unemployment over time
+plt.figure(figsize=(12, 6))
+
+plt.plot(
+    df["observation_date"],
+    df["delinquency_rate"],
+    label="Loan Delinquency Rate",
+    color="navy",
+    linewidth=2
+)
+
+plt.plot(
+    df["observation_date"],
+    df["unemployment_rate"],
+    label="Unemployment Rate",
+    color="darkred",
+    linewidth=2,
+    alpha=0.8
+)
+
+plt.title(
+    "Commercial Bank Delinquency vs. Unemployment (1986-2026)",
+    fontsize=14
+)
+
+plt.xlabel("Year")
+plt.ylabel("Rate (%)")
+
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+
+plt.savefig(
+    "outputs/figures/delinquency_vs_unemployment.png",
+    dpi=300
+)
+
+plt.show()
