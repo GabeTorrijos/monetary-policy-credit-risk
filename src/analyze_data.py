@@ -95,3 +95,9 @@ plt.savefig(
 )
 
 plt.show()
+
+#Calculate correlation between economic indicators
+correlation_matrix = df[variables].corr()
+
+print("\n--- Correlation Matrix ---")
+print(correlation_matrix.round(3).to_string())
