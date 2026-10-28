@@ -101,3 +101,23 @@ correlation_matrix = df[variables].corr()
 
 print("\n--- Correlation Matrix ---")
 print(correlation_matrix.round(3).to_string())
+
+#Examine lagged correlations between unemployment and delinquency
+print("\n--- Lagged Unemployment Correlations ---")
+
+for lag in range(0, 9):
+    lagged_unemployment = df["unemployment_rate"].shift(lag)
+
+    correlation = df["delinquency_rate"].corr(lagged_unemployment)
+
+    print(f"Lag {lag} quarters: {correlation:.3f}")
+
+#Examine persistence in commercial bank delinquency rates
+print("\n--- Delinquency Persistence ---")
+
+for lag in range(1, 5):
+    lagged_delinquency = df["delinquency_rate"].shift(lag)
+
+    correlation = df["delinquency_rate"].corr(lagged_delinquency)
+
+    print(f"Lag {lag} quarters: {correlation:.3f}")
