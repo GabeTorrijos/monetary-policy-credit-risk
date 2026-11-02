@@ -53,4 +53,22 @@ actual = test["delinquency_rate"]
 
 #Calculate forecast errors
 mae = np.mean(np.abs(actual - predictions))
-rsme = np.sqrt(np.mean((actual - predictions) **2))
+rmse = np.sqrt(np.mean((actual - predictions) **2))
+
+print("\n--- Macroeconomic Regression ---")
+print(model.summary())
+
+print("\n--- Out-of-Sample Forecast Evaluation ---")
+print(f"Training observations: {len(train)}")
+print(f"Testing observations: {len(test)}")
+print(f"MAE: {mae:.4f}")
+print(f"RMSE: {rmse:.4f}")
+
+#Compare against AR(1) baseline
+baseline_mae = 0.0381
+
+improvement = (
+    (baseline_mae - mae) / baseline_mae
+) * 100
+
+print(f"\nImprovement over AR(1): {improvement:.2f}%")
