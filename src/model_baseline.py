@@ -48,3 +48,34 @@ print(f"Training period: {train['observation_date'].min().date()} to {train['obs
 print(f"Testing period: {test['observation_date'].min().date()} to {test['observation_date'].max().date()}")
 print(f"MAE: {mae:.4f}")
 print(f"RMSE: {rmse:.4f}")
+
+#Naive persistence forecast
+naive_predictions = test["delinquency_lag1"]
+
+#Calculate naive forecast errors
+naive_mae = mean_absolute_error(
+    test["delinquency_rate"],
+    naive_predictions
+)
+
+naive_rmse = np.sqrt(
+    mean_squared_error(
+        test["delinquency_rate"],
+        naive_predictions
+    )
+)
+
+print("\n--- Naive Persistence Forecast ---")
+print(f"MAE: {naive_mae:.4f}")
+print(f"RSME: {naive_rmse:.4f}")
+
+#Compare forecasting performance
+print("\n--- Model Comparison ---")
+print(f"AR(1) MAE: {mae:.4f}")
+print(f"Naive MAE: {naive_mae:.4f}")
+
+improvement = (
+    (naive_mae - mae) / naive_mae
+) * 100
+
+print(f"AR(1) Improvement: {improvement:.2f}%")
