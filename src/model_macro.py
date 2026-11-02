@@ -72,3 +72,39 @@ improvement = (
 ) * 100
 
 print(f"\nImprovement over AR(1): {improvement:.2f}%")
+
+#Is the macroeconomic model worse across the entire test period or are
+#a handful of unusual quarters responsible for most of its errors?
+
+#Examine the largest forecasting errors
+results = test[
+    [
+        "observation_date",
+        "delinquency_rate",
+        "unemployment_rate_lag1"
+    ]
+].copy()
+
+results["predicted_delinquency"] = predictions
+results["absolute_error"] = (
+    results["delinquency_rate"] -
+    results["predicted_delinquency"]
+).abs()
+
+#Compare errors against naive persistence
+results["naive_prediction"] = test["delinquency_rate_lag1"]
+results["naive_absolute_error"] = (
+    results["delinquency_rate"] -
+    results["naive_prediction"]
+).abs()
+
+print("\n--- Eight Largest Macroeconomic Forecast Errors ---")
+
+print("Available columns:", results.columns.tolist())
+
+print(
+    results.sort_values(
+        "absolute_error",
+        ascending=False
+    ).head(8).round(3).to_string(index=False)
+)
