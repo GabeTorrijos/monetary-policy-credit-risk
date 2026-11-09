@@ -134,3 +134,13 @@ print(
 )
 
 squared_errors = results["absolute_error"] ** 2
+
+pandemic_share = (
+    squared_errors.loc[pandemic_quarters].sum()
+    / squared_errors.sum()
+) * 100
+
+print(
+    f"Pandemic quarters' share of total squared error: "
+    f"{pandemic_share:.2f}%"
+)
