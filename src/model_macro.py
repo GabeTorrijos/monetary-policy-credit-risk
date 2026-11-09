@@ -202,3 +202,16 @@ macro_validation_mae = calculate_validation_mae(
 
 print(f"AR(1) Validation MAE: {baseline_validation_mae:.4f}")
 print(f"Macro Validation MAE: {macro_validation_mae:.4f}")
+
+#Naive forecast on validation data 
+naive_validation_mae = np.mean(
+    np.abs(
+        validation["delinquency_rate"] -
+        validation["delinquency_rate_lag1"]
+    )
+)
+
+print("\n--- Naive Validation Benchmark ---")
+print(f"Naive Validation MAE: {naive_validation_mae:.4f}")
+print(f"AR(1) Validation MAE: {baseline_validation_mae:.4f}")
+print(f"Macro Validation MAE: {macro_validation_mae:.4f}")
