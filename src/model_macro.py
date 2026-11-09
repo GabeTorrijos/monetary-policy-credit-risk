@@ -166,3 +166,39 @@ print(
     f"Pandemic share of total squared error: "
     f"{pandemic_share:.2f}%"
 )
+
+#Compare baseline and macro models on validation data
+print("\n--- Validation Model Comparison ---")
+
+def calculate_validation_mae(predictors):
+    X_dev = sm.add_constant(
+        development_train[predictors],
+        has_constant="add"
+    )
+
+    y_dev = development_train["delinquency_rate"]
+
+    validation_model = sm.OLS(y_dev, X_dev).fit()
+
+    X_val = sm.add_constant(
+        validation[predictors],
+        has_constant="add"
+    )
+
+    predictions_val = validation_model.predict(X_val)
+
+    return np.mean(
+        np.abs(validation["delinquency_rate"] - predictions_val)
+    )
+
+
+baseline_validation_mae = calculate_validation_mae(
+    ["delinquency_rate_lag1"]
+)
+
+macro_validation_mae = calculate_validation_mae(
+    predictors
+)
+
+print(f"AR(1) Validation MAE: {baseline_validation_mae:.4f}")
+print(f"Macro Validation MAE: {macro_validation_mae:.4f}")
