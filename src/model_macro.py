@@ -110,37 +110,38 @@ print(
 )
 
 #Sensitivity analysis: pandemic forecast errors
-pandemic_quarters = results["observation_date"].isin(
-    pd.to_datetime(["2020-07-01", "2020-1-01"])
-)
+pandemic_dates = pd.to_datetime([
+    "2020-07-01",
+    "2020-10-01"
+])
 
-normal_period = results.loc[~pandemic_quarters]
+pandemic_mask = results["observation_date"].isin(pandemic_dates)
 
-print("\n--- Pandemic Sensitivity Analysis ---")
+normal_period = results.loc[~pandemic_mask]
 
-print(
-    "Macro MAE excluding 2020 Q3-Q4:",
-    round(normal_period["absolute_error"].mean(), 4)
-)
-
-print(
-    "Naive MAE excluding 2020 Q3-Q4:",
-    round(normal_period["absolute_error"].mean(), 4)
-)
-
-print(
-    "Naive MAE excluding 2020 Q3-Q4:",
-    round(normal_period["naive_absolute_error"].mean(), 4)
-)
-
+#Calculate contribution to total squared error
 squared_errors = results["absolute_error"] ** 2
 
 pandemic_share = (
-    squared_errors.loc[pandemic_quarters].sum()
+    squared_errors.loc[pandemic_mask].sum()
     / squared_errors.sum()
 ) * 100
 
+print("\n--- Pandemic Sensitivity Analysis ---")
+print(f"Excluded quarters: {pandemic_mask.sum()}")
+print(f"Remaining quarters: {len(normal_period)}")
+
 print(
-    f"Pandemic quarters' share of total squared error: "
+    f"Macro MAE excluding pandemic quarters: "
+    f"{normal_period['absolute_error'].mean():.4f}"
+)
+
+print(
+    f"Naive MAE excluding pandemic quarters: "
+    f"{normal_period['naive_absolute_error'].mean():.4f}"
+)
+
+print(
+    f"Pandemic share of total squared error: "
     f"{pandemic_share:.2f}%"
 )
