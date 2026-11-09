@@ -28,6 +28,27 @@ split_index = int(len(df) * 0.80)
 train = df.iloc[:split_index]
 test = df.iloc[split_index:]
 
+#Create training and validation sets
+validation_index = int(len(train) * 0.80)
+
+development_train = train.iloc[:validation_index].copy()
+validation = train.iloc[validation_index:].copy()
+
+print("\n--- Development Data Split ----")
+print(f"Training observations: {len(development_train)}")
+print(f"Validation observations: {len(validation)}")
+print(f"Final test observations: {len(test)}")
+
+print(
+    f"Training ends: "
+    f"{development_train['observation_date'].max().date()}"
+)
+
+print(
+    f"Validation begins: "
+    f"{validation['observation_date'].min().date()}"
+)
+
 #Define predictors
 predictors = [
     "delinquency_rate_lag1",
