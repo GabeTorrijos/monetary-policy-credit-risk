@@ -108,3 +108,29 @@ print(
         ascending=False
     ).head(8).round(3).to_string(index=False)
 )
+
+#Sensitivity analysis: pandemic forecast errors
+pandemic_quarters = results["observation_date"].isin(
+    pd.to_datetime(["2020-07-01", "2020-1-01"])
+)
+
+normal_period = results.loc[~pandemic_quarters]
+
+print("\n--- Pandemic Sensitivity Analysis ---")
+
+print(
+    "Macro MAE excluding 2020 Q3-Q4:",
+    round(normal_period["absolute_error"].mean(), 4)
+)
+
+print(
+    "Naive MAE excluding 2020 Q3-Q4:",
+    round(normal_period["absolute_error"].mean(), 4)
+)
+
+print(
+    "Naive MAE excluding 2020 Q3-Q4:",
+    round(normal_period["naive_absolute_error"].mean(), 4)
+)
+
+squared_errors = results["absolute_error"] ** 2
