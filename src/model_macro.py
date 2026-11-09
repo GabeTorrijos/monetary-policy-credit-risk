@@ -106,7 +106,7 @@ print(
     results.sort_values(
         "absolute_error",
         ascending=False
-    ).head(8).round(3).to_string(index=False)
+    ).head(8).to_string(index=False, float_format="%.3f")
 )
 
 #Sensitivity analysis: pandemic forecast errors
