@@ -159,3 +159,36 @@ for lag in (1, 2, 3, 4):
     ]
     validation_mae = calculate_validation_mae(lagged_predictors)
     print(f"Lag {lag} macro validation MAE: {validation_mae:.4f}")
+
+#Compare the four-quarter model with the naive forecast quarter by quarter.
+lag4_predictors = [
+    "delinquency_rate_lag1",
+    "unemployment_rate_lag4",
+    "fed_funds_rate_lag4",
+    "inflation_yoy_lag1",
+]
+
+X_dev_lag4 = sm.add_constant(
+    lag_comparison_train[lag4_predictors], has_constant="add"
+)
+lag4_model = sm.OLS(
+    lag_comparison_train["delinquency_rate"], X_dev_lag4
+).fit()
+
+X_val_lag4 = sm.add_constant(validation[lag4_predictors], has_constant="add")
+lag4_predictions = lag4_model.predict(X_val_lag4)
+
+actual_validation = validation["delinquency_rate"]
+naive_errors = (actual_validation - validation["delinquency_rate_lag1"]).abs()
+lag4_errors = (actual_validation - lag4_predictions).abs()
+
+#Positive values mean the four-quarter forecast was closer.
+error_reduction = naive_errors - lag4_errors
+biggest_win = error_reduction.idxmax()
+biggest_win_date = validation.loc[biggest_win, "observation_date"].date()
+average_without_biggest_win = error_reduction.drop(biggest_win).mean()
+
+print("\n--- For-Quarter Model Check ---")
+print(f"Quarters it beat naive: {(error_reduction > 0).sum()} of {len(validation)}")
+print(f"Biggest win: {biggest_win_date} ({error_reduction.max():.4f} pp")
+print(f"Average improvement without that quarter: {average_without_biggest_win:.4f} pp")
